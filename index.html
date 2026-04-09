@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animal Leadership Quiz</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --primary:#2563eb;
+      --primary-soft:#dbeafe;
+      --radius:20px;
+      --shadow:0 14px 34px rgba(0,0,0,0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:linear-gradient(180deg,#f8fbff 0%, var(--bg) 100%);
+      color:var(--text); /* FIXED HERE */
+      min-height:100vh;
+      padding:20px;
+    }
+    .app{max-width:760px;margin:0 auto}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px;
+    }
+    h1,h2,h3,p{margin-top:0}
+    .hidden{display:none!important}
+    .center{text-align:center}
+    .intro{
+      color:var(--muted);
+      line-height:1.55;
+      max-width:620px;
+      margin:0 auto 22px;
+    }
+    .hero-emoji{font-size:2.8rem;margin-bottom:10px}
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:700;
+    }
+    progress{
+      width:100%;
+      height:14px;
+      border:none;
+      border-radius:999px;
+      overflow:hidden;
+      margin-bottom:22px;
+    }
+    .question{
+      font-size:1.25rem;
+      font-weight:700;
+      line-height:1.4;
+      margin-bottom:18px;
+    }
+    .options{display:grid;gap:12px;margin-bottom:22px}
+    .option{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      cursor:pointer;
+      background:#fff;
+      transition:0.18s ease;
+    }
+    .option:hover{
+      border-color:#bfd3ff;
+      background:#f8fbff;
+      transform:translateY(-1px);
+    }
+    .option.selected{
+      border-color:var(--primary);
+      background:var(--primary-soft);
+    }
+    .option input{
+      margin-top:3px;
+      accent-color:var(--primary);
+      transform:scale(1.1);
+    }
+    .option-key{font-weight:700;min-width:24px}
+    .option-text{line-height:1.45}
+    .actions{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:none;
+      border-radius:12px;
+      padding:12px 18px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.18s ease;
+    }
+    button:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:disabled{background:#9db7ea;cursor:not-allowed;transform:none}
+    .btn-secondary{background:#eef2f7;color:var(--text)}
+    .result-wrap{max-width:520px;margin:0 auto;text-align:center}
+    .animal-image{
+      width:100%;
+      max-width:280px;
+      aspect-ratio:1/1;
+      object-fit:cover;
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:#f8fafc;
+      margin:8px auto 18px;
+      display:block;
+      box-shadow:0 10px 24px rgba(0,0,0,0.06);
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 14px;
+      background:#f8fafc;
+      font-weight:700;
+      margin-bottom:14px;
+    }
+    .section{
+      text-align:left;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:16px;
+      background:#fafcff;
+      margin-top:14px;
+    }
+    .section h3{margin-bottom:10px;font-size:1rem}
+    ul{margin:0;padding-left:20px;line-height:1.55}
+    .footer-note{
+      margin-top:16px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+    }
+    @media (max-width:640px){
+      .card{padding:18px}
+      .question{font-size:1.12rem}
+      .actions button{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+
+      <section id="welcomeScreen">
+        <div class="center">
+          <div class="hero-emoji">🦁 🐼 🦊 🐘</div>
+          <h1>What’s Your Leadership Style?</h1>
+          <p class="intro">
+            Scan the QR code and complete this short quiz to discover your leadership style.
+          </p>
+          <button class="btn-primary" id="startBtn">Start Quiz</button>
+        </div>
+      </section>
+
+      <section id="quizScreen" class="hidden">
+        <div class="topbar">
+          <div id="questionCounter"></div>
+          <div>In progress</div>
+        </div>
+        <progress id="progressBar"></progress>
+        <div id="questionText"></div>
+        <div id="optionsContainer"></div>
+        <button id="nextBtn" disabled>Next</button>
+      </section>
+
+      <section id="resultScreen" class="hidden">
+        <h2 id="resultTitle"></h2>
+        <img id="animalImage" class="animal-image"/>
+        <h3>Strengths</h3>
+        <ul id="strengthsList"></ul>
+        <h3>Watch-outs</h3>
+        <ul id="watchoutsList"></ul>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const questions = [
+        { text: "When working in a group, I usually:", options: [
+          { text: "Take the lead", animal: "lion" },
+          { text: "Support others", animal: "panda" },
+          { text: "Think strategically", animal: "fox" },
+          { text: "Organise things", animal: "elephant" }
+        ]}
+      ];
+
+      const profiles = {
+        lion: { title:"Lion", strengths:["Confident","Leader"], watchouts:["Dominant"] },
+        panda: { title:"Panda", strengths:["Supportive"], watchouts:["Avoids conflict"] },
+        fox: { title:"Fox", strengths:["Strategic"], watchouts:["Overthinks"] },
+        elephant: { title:"Elephant", strengths:["Reliable"], watchouts:["Rigid"] }
+      };
+
+      let index = 0;
+      let answers = [];
+
+      const startBtn = document.getElementById("startBtn");
+      const quizScreen = document.getElementById("quizScreen");
+      const welcomeScreen = document.getElementById("welcomeScreen");
+
+      startBtn.onclick = () => {
+        welcomeScreen.classList.add("hidden");
+        quizScreen.classList.remove("hidden");
+        loadQuestion();
+      };
+
+      function loadQuestion(){
+        const q = questions[index];
+        document.getElementById("questionText").innerText = q.text;
+        const container = document.getElementById("optionsContainer");
+        container.innerHTML = "";
+
+        q.options.forEach(opt=>{
+          const btn = document.createElement("button");
+          btn.innerText = opt.text;
+          btn.onclick = ()=>{
+            answers.push(opt.animal);
+            showResult();
+          };
+          container.appendChild(btn);
+        });
+      }
+
+      function showResult(){
+        quizScreen.classList.add("hidden");
+        document.getElementById("resultScreen").classList.remove("hidden");
+
+        const result = answers[0];
+        const profile = profiles[result];
+
+        document.getElementById("resultTitle").innerText = profile.title;
+      }
+
+    });
+  </script>
+</body>
+</html>
