@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Animal Leadership Quiz</title>
+  <title> What is Your leadership Style </title>
   <style>
     :root{
       --bg:#f3f6fb;
@@ -102,6 +102,13 @@
     progress::-moz-progress-bar{
       background:#5f88d6;
       border-radius:999px;
+    }
+
+    .question-number{
+      font-weight:700;
+      margin-bottom:8px;
+      color:var(--muted);
+      font-size:0.95rem;
     }
 
     .question{
@@ -303,6 +310,7 @@
 
         <progress id="progressBar" value="1" max="16"></progress>
 
+        <div id="questionNumber" class="question-number"></div>
         <div class="question" id="questionText"></div>
         <div class="options" id="optionsContainer"></div>
 
@@ -342,32 +350,13 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const STORAGE_KEY = "animalLeadershipQuiz_hiddenVariants_v1";
-
-      function svgData(label, emoji, bg1, bg2){
-        const svg = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-            <defs>
-              <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-                <stop offset="0%" stop-color="${bg1}"/>
-                <stop offset="100%" stop-color="${bg2}"/>
-              </linearGradient>
-            </defs>
-            <rect width="600" height="600" rx="48" fill="url(#g)"/>
-            <circle cx="300" cy="220" r="118" fill="rgba(255,255,255,0.20)"/>
-            <text x="300" y="270" text-anchor="middle" font-size="128">${emoji}</text>
-            <text x="300" y="410" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700" fill="#ffffff">${label}</text>
-          </svg>`;
-        return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-      }
-
       const profiles = {
         lion: {
           title: "Lion — The Leader",
           variants: {
             driving: {
               emoji: "🦁",
-              image: svgData("Lion", "🦁", "#f59e0b", "#f97316"),
+              image: "lion-driving.png",
               strengths: [
                 "Drives momentum and action",
                 "Takes initiative quickly",
@@ -382,7 +371,7 @@
             },
             grounded: {
               emoji: "🦁",
-              image: svgData("Lion", "🦁", "#d97706", "#f59e0b"),
+              image: "lion-grounded.png",
               strengths: [
                 "Provides direction with steadiness",
                 "Helps the group stay focused",
@@ -403,7 +392,7 @@
           variants: {
             inclusive: {
               emoji: "🐼",
-              image: svgData("Panda", "🐼", "#10b981", "#14b8a6"),
+              image: "panda-driving.png",
               strengths: [
                 "Helps people feel included",
                 "Builds trust and connection",
@@ -418,7 +407,7 @@
             },
             supportive: {
               emoji: "🐼",
-              image: svgData("Panda", "🐼", "#059669", "#10b981"),
+              image: "panda-grounded.png",
               strengths: [
                 "Provides steady support to the group",
                 "Contributes to a positive team environment",
@@ -439,7 +428,7 @@
           variants: {
             analytical: {
               emoji: "🦊",
-              image: svgData("Fox", "🦊", "#ef4444", "#ec4899"),
+              image: "fox-driving.png",
               strengths: [
                 "Thinks critically and strategically",
                 "Identifies patterns and possibilities",
@@ -454,7 +443,7 @@
             },
             reflective: {
               emoji: "🦊",
-              image: svgData("Fox", "🦊", "#dc2626", "#f43f5e"),
+              image: "fox-grounded.png",
               strengths: [
                 "Observes situations carefully",
                 "Brings measured and thoughtful input",
@@ -475,7 +464,7 @@
           variants: {
             structured: {
               emoji: "🐘",
-              image: svgData("Elephant", "🐘", "#6366f1", "#8b5cf6"),
+              image: "elephant-driving.png",
               strengths: [
                 "Keeps work structured and organised",
                 "Creates clarity around roles and tasks",
@@ -490,7 +479,7 @@
             },
             dependable: {
               emoji: "🐘",
-              image: svgData("Elephant", "🐘", "#4f46e5", "#6366f1"),
+              image: "elephant-grounded.png",
               strengths: [
                 "Reliable and steady in group work",
                 "Follows through on responsibilities",
@@ -654,7 +643,7 @@
         }
       ];
 
-      let state = loadState() || {
+      let state = {
         started: false,
         currentIndex: 0,
         answers: Array(questions.length).fill(null),
@@ -667,6 +656,7 @@
       const startBtn = document.getElementById("startBtn");
       const questionCounter = document.getElementById("questionCounter");
       const progressBar = document.getElementById("progressBar");
+      const questionNumber = document.getElementById("questionNumber");
       const questionText = document.getElementById("questionText");
       const optionsContainer = document.getElementById("optionsContainer");
       const prevBtn = document.getElementById("prevBtn");
@@ -677,23 +667,6 @@
       const strengthsList = document.getElementById("strengthsList");
       const watchoutsList = document.getElementById("watchoutsList");
       const restartBtn = document.getElementById("restartBtn");
-
-      function saveState() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      }
-
-      function loadState() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          return raw ? JSON.parse(raw) : null;
-        } catch {
-          return null;
-        }
-      }
-
-      function clearState() {
-        localStorage.removeItem(STORAGE_KEY);
-      }
 
       function showScreen(name) {
         welcomeScreen.classList.add("hidden");
@@ -707,7 +680,9 @@
 
       function renderQuestion() {
         const q = questions[state.currentIndex];
+
         questionCounter.textContent = `Question ${state.currentIndex + 1} of ${questions.length}`;
+        questionNumber.textContent = `Question ${state.currentIndex + 1} of ${questions.length}`;
         progressBar.max = questions.length;
         progressBar.value = state.currentIndex + 1;
         questionText.textContent = q.text;
@@ -733,7 +708,6 @@
             label.classList.add("selected");
             state.answers[state.currentIndex] = option.key;
             nextBtn.disabled = false;
-            saveState();
           });
 
           optionsContainer.appendChild(label);
@@ -807,8 +781,9 @@
         if (topAnimals.length > 1) {
           resultBadge.textContent = "✨ Your result";
           resultTitle.textContent = "Mixed Leadership Style";
-          animalImage.src = svgData("Mixed", "✨", "#64748b", "#334155");
+          animalImage.src = "";
           animalImage.alt = "Mixed Leadership Style";
+          animalImage.style.background = "linear-gradient(135deg, #64748b, #334155)";
 
           populateList(strengthsList, [
             "Can adapt across different situations",
@@ -823,7 +798,6 @@
           ]);
 
           state.completed = true;
-          saveState();
           showScreen("result");
           return;
         }
@@ -865,6 +839,7 @@
         resultBadge.textContent = `${profile.emoji} Your result`;
         resultTitle.textContent = profileGroup.title;
 
+        animalImage.style.background = "";
         animalImage.src = profile.image;
         animalImage.alt = profileGroup.title;
 
@@ -872,13 +847,11 @@
         populateList(watchoutsList, profile.watchouts);
 
         state.completed = true;
-        saveState();
         showScreen("result");
       }
 
       startBtn.addEventListener("click", () => {
         state.started = true;
-        saveState();
         showScreen("quiz");
         renderQuestion();
       });
@@ -886,7 +859,6 @@
       prevBtn.addEventListener("click", () => {
         if (state.currentIndex > 0) {
           state.currentIndex--;
-          saveState();
           renderQuestion();
         }
       });
@@ -896,7 +868,6 @@
 
         if (state.currentIndex < questions.length - 1) {
           state.currentIndex++;
-          saveState();
           renderQuestion();
         } else {
           renderResult();
@@ -910,18 +881,10 @@
           answers: Array(questions.length).fill(null),
           completed: false
         };
-        clearState();
         showScreen("welcome");
       });
 
-      if (state.completed && state.answers.every(Boolean)) {
-        renderResult();
-      } else if (state.started) {
-        showScreen("quiz");
-        renderQuestion();
-      } else {
-        showScreen("welcome");
-      }
+      showScreen("welcome");
     });
   </script>
 </body>
