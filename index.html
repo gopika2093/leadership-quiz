@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> What is Your leadership Style </title>
+  <title> What is Your Leadership Animal? </title>
   <style>
     :root{
       --bg:#f3f6fb;
@@ -277,7 +277,28 @@
       margin-top:16px;
       line-height:1.45;
     }
+    
+.qr-wrap{
+  margin:18px auto 22px;
+  text-align:center;
+}
 
+.qr-code{
+  width:160px;
+  height:160px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.06);
+}
+
+.qr-note{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:0.95rem;
+  }
+    
     @media (max-width:640px){
       body{padding:14px}
       .card{padding:18px}
@@ -292,15 +313,21 @@
 <body>
   <div class="app">
     <div class="card">
-      <section id="welcomeScreen" class="welcome">
-        <div class="hero">🦁 🐼 🦊 🐘</div>
-        <h1>What’s Your Leadership Style?</h1>
-        <p>
-          Scan the QR code and complete this short quiz to discover your leadership style.
-          There are no right or wrong answers — choose the option that feels most like you.
-        </p>
-        <button class="btn-primary" id="startBtn">Start Quiz</button>
-      </section>
+    <section id="welcomeScreen" class="welcome">
+  <div class="hero">🦁 🐼 🦊 🐘</div>
+  <h1>What’s Your Leadership Style?</h1>
+  <p>
+    Scan the QR code and complete this short quiz to discover your leadership style.
+    There are no right or wrong answers — choose the option that feels most like you.
+  </p>
+
+  <div class="qr-wrap">
+    <img id="qrCodeImage" class="qr-code" alt="QR code for this quiz" />
+    <p class="qr-note">Scan to open this quiz on your phone</p>
+  </div>
+
+  <button class="btn-primary" id="startBtn">Start Quiz</button>
+</section>
 
       <section id="quizScreen" class="hidden">
         <div class="topbar">
@@ -650,23 +677,27 @@
         completed: false
       };
 
-      const welcomeScreen = document.getElementById("welcomeScreen");
-      const quizScreen = document.getElementById("quizScreen");
-      const resultScreen = document.getElementById("resultScreen");
-      const startBtn = document.getElementById("startBtn");
-      const questionCounter = document.getElementById("questionCounter");
-      const progressBar = document.getElementById("progressBar");
-      const questionNumber = document.getElementById("questionNumber");
-      const questionText = document.getElementById("questionText");
-      const optionsContainer = document.getElementById("optionsContainer");
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      const resultBadge = document.getElementById("resultBadge");
-      const resultTitle = document.getElementById("resultTitle");
-      const animalImage = document.getElementById("animalImage");
-      const strengthsList = document.getElementById("strengthsList");
-      const watchoutsList = document.getElementById("watchoutsList");
-      const restartBtn = document.getElementById("restartBtn");
+    const welcomeScreen = document.getElementById("welcomeScreen");
+const quizScreen = document.getElementById("quizScreen");
+const resultScreen = document.getElementById("resultScreen");
+const startBtn = document.getElementById("startBtn");
+const questionCounter = document.getElementById("questionCounter");
+const progressBar = document.getElementById("progressBar");
+const questionNumber = document.getElementById("questionNumber");
+const questionText = document.getElementById("questionText");
+const optionsContainer = document.getElementById("optionsContainer");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const resultBadge = document.getElementById("resultBadge");
+const resultTitle = document.getElementById("resultTitle");
+const animalImage = document.getElementById("animalImage");
+const strengthsList = document.getElementById("strengthsList");
+const watchoutsList = document.getElementById("watchoutsList");
+const restartBtn = document.getElementById("restartBtn");
+const qrCodeImage = document.getElementById("qrCodeImage");
+
+const currentQuizUrl = window.location.href.split("?")[0];
+qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(currentQuizUrl)}`;
 
       function showScreen(name) {
         welcomeScreen.classList.add("hidden");
