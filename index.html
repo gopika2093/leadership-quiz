@@ -90,17 +90,17 @@
     }
 
     progress::-webkit-progress-bar{
-      background:#9d9d9d;
+      background:#e7edf6;
       border-radius:999px;
     }
 
     progress::-webkit-progress-value{
-      background:#128a18;
+      background:#5f88d6;
       border-radius:999px;
     }
 
     progress::-moz-progress-bar{
-      background:#128a18;
+      background:#5f88d6;
       border-radius:999px;
     }
 
@@ -119,7 +119,7 @@
 
     .option{
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       gap:16px;
       border:1px solid var(--line);
       border-radius:18px;
@@ -143,7 +143,7 @@
       accent-color:var(--primary-dark);
       width:18px;
       height:18px;
-      margin:0;
+      margin:2px 0 0 0;
       flex-shrink:0;
     }
 
@@ -297,11 +297,11 @@
 
       <section id="quizScreen" class="hidden">
         <div class="topbar">
-          <div id="questionCounter">Question 1 of 12</div>
+          <div id="questionCounter">Question 1 of 16</div>
           <div>In progress</div>
         </div>
 
-        <progress id="progressBar" value="1" max="12"></progress>
+        <progress id="progressBar" value="1" max="16"></progress>
 
         <div class="question" id="questionText"></div>
         <div class="options" id="optionsContainer"></div>
@@ -342,7 +342,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const STORAGE_KEY = "animalLeadershipQuiz_qr_v2";
+      const STORAGE_KEY = "animalLeadershipQuiz_hiddenVariants_v1";
 
       function svgData(label, emoji, bg1, bg2){
         const svg = `
@@ -363,193 +363,293 @@
 
       const profiles = {
         lion: {
-          emoji: "🦁",
           title: "Lion — The Leader",
-          image: svgData("Lion", "🦁", "#f59e0b", "#f97316"),
-          strengths: [
-            "Confident and decisive",
-            "Takes initiative",
-            "Drives action and momentum",
-            "Comfortable leading under pressure"
-          ],
-          watchouts: [
-            "May dominate discussion",
-            "Can move too quickly for others",
-            "May overlook quieter perspectives"
-          ]
+          variants: {
+            driving: {
+              emoji: "🦁",
+              image: svgData("Lion", "🦁", "#f59e0b", "#f97316"),
+              strengths: [
+                "Drives momentum and action",
+                "Takes initiative quickly",
+                "Comfortable making decisions",
+                "Helps move the group forward"
+              ],
+              watchouts: [
+                "May move ahead before others are ready",
+                "Can take on a lot of control in group situations",
+                "May focus strongly on their own direction"
+              ]
+            },
+            grounded: {
+              emoji: "🦁",
+              image: svgData("Lion", "🦁", "#d97706", "#f59e0b"),
+              strengths: [
+                "Provides direction with steadiness",
+                "Helps the group stay focused",
+                "Balances progress with responsibility",
+                "Brings confidence in uncertain situations"
+              ],
+              watchouts: [
+                "May carry too much responsibility personally",
+                "Can become heavily outcome-focused",
+                "May not always pause to share leadership"
+              ]
+            }
+          }
         },
+
         panda: {
-          emoji: "🐼",
-          title: "Panda — The Supporter",
-          image: svgData("Panda", "🐼", "#10b981", "#14b8a6"),
-          strengths: [
-            "Supportive and empathetic",
-            "Builds inclusion and trust",
-            "Helps others feel heard",
-            "Keeps team morale steady"
-          ],
-          watchouts: [
-            "May avoid conflict",
-            "Can hesitate to assert ideas",
-            "May prioritise harmony over action"
-          ]
+          title: "Panda — The Connector",
+          variants: {
+            inclusive: {
+              emoji: "🐼",
+              image: svgData("Panda", "🐼", "#10b981", "#14b8a6"),
+              strengths: [
+                "Helps people feel included",
+                "Builds trust and connection",
+                "Pays attention to group dynamics",
+                "Encourages collaboration"
+              ],
+              watchouts: [
+                "May prioritise harmony over challenge",
+                "Can hesitate to address difficult issues directly",
+                "May take on too much emotional responsibility"
+              ]
+            },
+            supportive: {
+              emoji: "🐼",
+              image: svgData("Panda", "🐼", "#059669", "#10b981"),
+              strengths: [
+                "Provides steady support to the group",
+                "Contributes to a positive team environment",
+                "Helps maintain group morale",
+                "Strengthens consistency in teamwork"
+              ],
+              watchouts: [
+                "May stay in a support role rather than step forward",
+                "Can avoid pushing ideas strongly",
+                "May place others’ needs ahead of their own voice"
+              ]
+            }
+          }
         },
+
         fox: {
-          emoji: "🦊",
           title: "Fox — The Strategist",
-          image: svgData("Fox", "🦊", "#ef4444", "#ec4899"),
-          strengths: [
-            "Analytical and thoughtful",
-            "Strong problem-solver",
-            "Sees patterns and possibilities",
-            "Brings creative ideas"
-          ],
-          watchouts: [
-            "May overthink",
-            "Can delay action",
-            "May seem distant in group settings"
-          ]
+          variants: {
+            analytical: {
+              emoji: "🦊",
+              image: svgData("Fox", "🦊", "#ef4444", "#ec4899"),
+              strengths: [
+                "Thinks critically and strategically",
+                "Identifies patterns and possibilities",
+                "Brings thoughtful insight",
+                "Asks useful questions"
+              ],
+              watchouts: [
+                "May overanalyse before acting",
+                "Can delay decisions while exploring options",
+                "May stay in thinking mode longer than needed"
+              ]
+            },
+            reflective: {
+              emoji: "🦊",
+              image: svgData("Fox", "🦊", "#dc2626", "#f43f5e"),
+              strengths: [
+                "Observes situations carefully",
+                "Brings measured and thoughtful input",
+                "Reflects before contributing",
+                "Helps the group think more deeply"
+              ],
+              watchouts: [
+                "May contribute selectively rather than consistently",
+                "Can seem distant while processing ideas",
+                "May hold back input until later"
+              ]
+            }
+          }
         },
+
         elephant: {
-          emoji: "🐘",
           title: "Elephant — The Stabiliser",
-          image: svgData("Elephant", "🐘", "#6366f1", "#8b5cf6"),
-          strengths: [
-            "Reliable and organised",
-            "Keeps things structured",
-            "Supports follow-through",
-            "Provides stability"
-          ],
-          watchouts: [
-            "May resist change",
-            "Can be slower to adapt",
-            "May rely too heavily on process"
-          ]
-        },
-        mixed: {
-          emoji: "✨",
-          title: "Mixed Result",
-          image: svgData("Mixed", "✨", "#64748b", "#334155"),
-          strengths: [
-            "Flexible across situations",
-            "Can balance different leadership tendencies",
-            "May adapt well to team needs"
-          ],
-          watchouts: [
-            "May find it harder to identify a default style",
-            "Can switch approaches without noticing",
-            "Still benefits from reflection"
-          ]
+          variants: {
+            structured: {
+              emoji: "🐘",
+              image: svgData("Elephant", "🐘", "#6366f1", "#8b5cf6"),
+              strengths: [
+                "Keeps work structured and organised",
+                "Creates clarity around roles and tasks",
+                "Supports consistency and follow-through",
+                "Helps the group stay on track"
+              ],
+              watchouts: [
+                "May rely heavily on structure",
+                "Can find change disruptive",
+                "May prioritise process over flexibility"
+              ]
+            },
+            dependable: {
+              emoji: "🐘",
+              image: svgData("Elephant", "🐘", "#4f46e5", "#6366f1"),
+              strengths: [
+                "Reliable and steady in group work",
+                "Follows through on responsibilities",
+                "Brings stability to the team",
+                "Supports dependable execution"
+              ],
+              watchouts: [
+                "May stay within defined boundaries rather than step forward",
+                "Can be slower to adapt when direction changes",
+                "May focus on their part more than the wider picture"
+              ]
+            }
+          }
         }
       };
 
       const questions = [
         {
-          text: "When working in a group, I usually:",
+          text: "A group has just been formed for a project. What do you find yourself doing first?",
           options: [
-            { key: "A", text: "Step up and take the lead", animal: "lion" },
-            { key: "B", text: "Support others and keep everyone included", animal: "panda" },
-            { key: "C", text: "Observe and think through the best approach", animal: "fox" },
-            { key: "D", text: "Make sure everything is organised and on track", animal: "elephant" }
+            { key: "A", text: "Start shaping what needs to be done so the group can get moving", animal: "lion" },
+            { key: "B", text: "Engage with others to understand how the group is coming together", animal: "panda" },
+            { key: "C", text: "Take time to observe before forming a clear view", animal: "fox" },
+            { key: "D", text: "Think about how the work can be organised effectively", animal: "elephant" }
           ]
         },
         {
-          text: "When a decision needs to be made quickly, I:",
+          text: "The group needs to make a quick decision. What is your instinct?",
           options: [
-            { key: "A", text: "Make the call confidently", animal: "lion" },
-            { key: "B", text: "Check how others feel before deciding", animal: "panda" },
-            { key: "C", text: "Analyse the options first", animal: "fox" },
-            { key: "D", text: "Prefer a clear process before deciding", animal: "elephant" }
+            { key: "A", text: "Help the group settle on a direction so progress can continue", animal: "lion" },
+            { key: "B", text: "Check how others are responding before moving ahead", animal: "panda" },
+            { key: "C", text: "Consider possible implications before deciding", animal: "fox" },
+            { key: "D", text: "Refer to what has already been discussed or agreed", animal: "elephant" }
           ]
         },
         {
-          text: "In a team discussion, I tend to:",
+          text: "During a group discussion, you are most likely to:",
           options: [
-            { key: "A", text: "Drive the conversation forward", animal: "lion" },
-            { key: "B", text: "Make sure everyone gets a chance to speak", animal: "panda" },
-            { key: "C", text: "Ask questions and challenge ideas", animal: "fox" },
-            { key: "D", text: "Keep the discussion focused and practical", animal: "elephant" }
+            { key: "A", text: "Keep the discussion moving toward a clear outcome", animal: "lion" },
+            { key: "B", text: "Ask questions to better understand what’s being discussed", animal: "fox" },
+            { key: "C", text: "Notice how different people are engaging in the conversation", animal: "panda" },
+            { key: "D", text: "Contribute in a way that helps move ideas forward", animal: "elephant" }
           ]
         },
         {
-          text: "When something goes wrong in a project, I:",
+          text: "Something in the project isn’t going as expected. You tend to:",
           options: [
-            { key: "A", text: "Take control and fix it immediately", animal: "lion" },
-            { key: "B", text: "Support the team and keep morale up", animal: "panda" },
-            { key: "C", text: "Analyse what caused the issue", animal: "fox" },
-            { key: "D", text: "Review the process to prevent it next time", animal: "elephant" }
+            { key: "A", text: "Work through what may have led to the situation", animal: "fox" },
+            { key: "B", text: "Step in to help clarify direction and move things forward", animal: "lion" },
+            { key: "C", text: "Check in with others to understand how they are experiencing it", animal: "panda" },
+            { key: "D", text: "Look at how the approach can be adjusted going forward", animal: "elephant" }
           ]
         },
         {
-          text: "My biggest strength in a team is:",
+          text: "When starting a new task, you usually:",
           options: [
-            { key: "A", text: "Leadership and direction", animal: "lion" },
-            { key: "B", text: "Empathy and teamwork", animal: "panda" },
-            { key: "C", text: "Problem-solving and ideas", animal: "fox" },
-            { key: "D", text: "Reliability and organisation", animal: "elephant" }
+            { key: "A", text: "Begin working and refine things as you go", animal: "lion" },
+            { key: "B", text: "Engage others to align on how to approach it", animal: "panda" },
+            { key: "C", text: "Think through different possibilities before acting", animal: "fox" },
+            { key: "D", text: "Structure how the task will be organised", animal: "elephant" }
           ]
         },
         {
-          text: "When planning an event, I:",
+          text: "When there is disagreement in the group, you tend to:",
           options: [
-            { key: "A", text: "Take charge and assign roles", animal: "lion" },
-            { key: "B", text: "Make sure everyone is comfortable and included", animal: "panda" },
-            { key: "C", text: "Think about creative ideas and improvements", animal: "fox" },
-            { key: "D", text: "Focus on timelines, logistics, and structure", animal: "elephant" }
+            { key: "A", text: "Focus on deciding which direction to move forward in", animal: "lion" },
+            { key: "B", text: "Actively bring people together to find common ground", animal: "panda" },
+            { key: "C", text: "Explore different perspectives before reaching a conclusion", animal: "fox" },
+            { key: "D", text: "Reinforce shared expectations or ways of working", animal: "elephant" }
           ]
         },
         {
-          text: "When there is conflict in a group, I:",
+          text: "You notice the group is losing focus. What do you do?",
           options: [
-            { key: "A", text: "Address it directly", animal: "lion" },
-            { key: "B", text: "Try to calm everyone and mediate", animal: "panda" },
-            { key: "C", text: "Try to understand both sides logically", animal: "fox" },
-            { key: "D", text: "Resolve it through clear steps and expectations", animal: "elephant" }
+            { key: "A", text: "Bring attention back to the goal so progress continues", animal: "lion" },
+            { key: "B", text: "Re-engage others to help bring the group back into the discussion", animal: "panda" },
+            { key: "C", text: "Pause to reflect on what might be affecting focus", animal: "fox" },
+            { key: "D", text: "Suggest returning to a clearer structure or plan", animal: "elephant" }
           ]
         },
         {
-          text: "In leadership roles, I prefer:",
+          text: "When working under pressure, you are more likely to:",
           options: [
-            { key: "A", text: "Being in charge and making decisions", animal: "lion" },
-            { key: "B", text: "Supporting and uplifting others", animal: "panda" },
-            { key: "C", text: "Advising and shaping ideas", animal: "fox" },
-            { key: "D", text: "Managing systems and making sure things run smoothly", animal: "elephant" }
+            { key: "A", text: "Act quickly to maintain momentum", animal: "lion" },
+            { key: "B", text: "Stay aware of how others are managing and respond accordingly", animal: "panda" },
+            { key: "C", text: "Take time to think through decisions carefully", animal: "fox" },
+            { key: "D", text: "Rely on structure or systems to stay on track", animal: "elephant" }
           ]
         },
         {
-          text: "When working under pressure, I:",
+          text: "A team member is not contributing much. You tend to:",
           options: [
-            { key: "A", text: "Act quickly and decisively", animal: "lion" },
-            { key: "B", text: "Stay calm and support others", animal: "panda" },
-            { key: "C", text: "Think carefully before acting", animal: "fox" },
-            { key: "D", text: "Stick to the plan and stay organised", animal: "elephant" }
+            { key: "A", text: "Step in to keep things progressing where needed", animal: "lion" },
+            { key: "B", text: "Reach out to understand what might be affecting them", animal: "panda" },
+            { key: "C", text: "Reflect on possible reasons behind the situation", animal: "fox" },
+            { key: "D", text: "Clarify expectations around roles and contributions", animal: "elephant" }
           ]
         },
         {
-          text: "If a team member is not contributing, I:",
+          text: "When working on a group project over time, you naturally:",
           options: [
-            { key: "A", text: "Step in and take over if needed", animal: "lion" },
-            { key: "B", text: "Check in with them and offer support", animal: "panda" },
-            { key: "C", text: "Try to understand why and suggest solutions", animal: "fox" },
-            { key: "D", text: "Remind them of their responsibilities", animal: "elephant" }
+            { key: "A", text: "Keep momentum going toward outcomes", animal: "lion" },
+            { key: "B", text: "Support a positive and collaborative environment", animal: "panda" },
+            { key: "C", text: "Look for ways to improve how things are being done", animal: "fox" },
+            { key: "D", text: "Maintain consistency and organisation across the work", animal: "elephant" }
           ]
         },
         {
-          text: "What motivates you most?",
+          text: "When working in a group over time, you tend to:",
           options: [
-            { key: "A", text: "Achieving results and success", animal: "lion" },
-            { key: "B", text: "Building strong relationships", animal: "panda" },
-            { key: "C", text: "Solving problems and learning new things", animal: "fox" },
-            { key: "D", text: "Creating order and stability", animal: "elephant" }
+            { key: "A", text: "Take responsibility to keep the group moving forward", animal: "lion" },
+            { key: "B", text: "Stay actively involved to support overall progress", animal: "panda" },
+            { key: "C", text: "Contribute where your input adds the most value", animal: "fox" },
+            { key: "D", text: "Focus on delivering your part effectively within the group’s direction", animal: "elephant" }
           ]
         },
         {
-          text: "In a group, people would most likely describe me as:",
+          text: "If a group task is not going well, you are most likely to:",
           options: [
-            { key: "A", text: "Confident and decisive", animal: "lion" },
-            { key: "B", text: "Friendly and supportive", animal: "panda" },
-            { key: "C", text: "Smart and strategic", animal: "fox" },
-            { key: "D", text: "Reliable and organised", animal: "elephant" }
+            { key: "A", text: "Take initiative to help move things back on track", animal: "lion" },
+            { key: "B", text: "Support others and contribute where needed", animal: "panda" },
+            { key: "C", text: "Step in where your input can make the most difference", animal: "fox" },
+            { key: "D", text: "Continue focusing on your responsibilities within the task", animal: "elephant" }
+          ]
+        },
+        {
+          text: "When taking on a role in a group, you are more likely to:",
+          options: [
+            { key: "A", text: "Take on responsibilities that help drive progress", animal: "lion" },
+            { key: "B", text: "Take on roles that support how the group works together", animal: "panda" },
+            { key: "C", text: "Focus on areas where you can contribute effectively", animal: "fox" },
+            { key: "D", text: "Take on a role and contribute within its scope", animal: "elephant" }
+          ]
+        },
+        {
+          text: "When managing shared resources (e.g. budget, materials), you tend to:",
+          options: [
+            { key: "A", text: "Ensure everything is tracked and clearly accounted for", animal: "lion" },
+            { key: "B", text: "Keep others informed and aligned in decisions", animal: "panda" },
+            { key: "C", text: "Adapt based on what is needed in the situation", animal: "fox" },
+            { key: "D", text: "Follow established approaches that have worked before", animal: "elephant" }
+          ]
+        },
+        {
+          text: "When rules or processes feel restrictive, you are more likely to:",
+          options: [
+            { key: "A", text: "Work within them while still achieving outcomes", animal: "lion" },
+            { key: "B", text: "Discuss with others how best to approach the situation", animal: "panda" },
+            { key: "C", text: "Adapt them where appropriate to make things work", animal: "fox" },
+            { key: "D", text: "Continue with the process as it is set", animal: "elephant" }
+          ]
+        },
+        {
+          text: "When working in a group project, you tend to focus on:",
+          options: [
+            { key: "A", text: "Ensuring the group achieves strong overall outcomes", animal: "lion" },
+            { key: "B", text: "Supporting others so the group works well together", animal: "panda" },
+            { key: "C", text: "Contributing where your input adds the most value", animal: "fox" },
+            { key: "D", text: "Delivering your responsibilities effectively within the group", animal: "elephant" }
           ]
         }
       ];
@@ -673,22 +773,101 @@
 
       function renderResult() {
         const scores = calculateScores();
-        const topAnimals = getTopAnimals(scores);
-        let profile;
 
-        if (topAnimals.length === 1) {
-          profile = profiles[topAnimals[0]];
-          resultBadge.textContent = `${profile.emoji} Your result`;
-          resultTitle.textContent = profile.title;
-        } else {
-          profile = profiles.mixed;
-          const names = topAnimals.map(a => `${profiles[a].emoji} ${profiles[a].title.split(" — ")[0]}`);
-          resultBadge.textContent = "✨ Mixed result";
-          resultTitle.textContent = `You are a mix of ${names.join(" and ")}`;
+        const variantScores = {
+          lion: { driving: 0, grounded: 0 },
+          panda: { inclusive: 0, supportive: 0 },
+          fox: { analytical: 0, reflective: 0 },
+          elephant: { structured: 0, dependable: 0 }
+        };
+
+        state.answers.forEach((answerKey, qIndex) => {
+          if (!answerKey) return;
+
+          const selected = questions[qIndex].options.find(o => o.key === answerKey);
+          if (!selected) return;
+
+          const animal = selected.animal;
+
+          if (qIndex < 10) {
+            if (animal === "lion") variantScores.lion.driving++;
+            if (animal === "panda") variantScores.panda.inclusive++;
+            if (animal === "fox") variantScores.fox.analytical++;
+            if (animal === "elephant") variantScores.elephant.structured++;
+          } else {
+            if (animal === "lion") variantScores.lion.grounded++;
+            if (animal === "panda") variantScores.panda.supportive++;
+            if (animal === "fox") variantScores.fox.reflective++;
+            if (animal === "elephant") variantScores.elephant.dependable++;
+          }
+        });
+
+        const topAnimals = getTopAnimals(scores);
+
+        if (topAnimals.length > 1) {
+          resultBadge.textContent = "✨ Your result";
+          resultTitle.textContent = "Mixed Leadership Style";
+          animalImage.src = svgData("Mixed", "✨", "#64748b", "#334155");
+          animalImage.alt = "Mixed Leadership Style";
+
+          populateList(strengthsList, [
+            "Can adapt across different situations",
+            "Draws from more than one way of leading",
+            "Brings flexibility to group settings"
+          ]);
+
+          populateList(watchoutsList, [
+            "May find it harder to identify a default style",
+            "Can shift approach depending on the situation",
+            "Still benefits from reflecting on how you show up in teams"
+          ]);
+
+          state.completed = true;
+          saveState();
+          showScreen("result");
+          return;
         }
 
+        const topAnimal = topAnimals[0];
+        let chosenVariant = "";
+
+        if (topAnimal === "lion") {
+          chosenVariant =
+            variantScores.lion.driving >= variantScores.lion.grounded
+              ? "driving"
+              : "grounded";
+        }
+
+        if (topAnimal === "panda") {
+          chosenVariant =
+            variantScores.panda.inclusive >= variantScores.panda.supportive
+              ? "inclusive"
+              : "supportive";
+        }
+
+        if (topAnimal === "fox") {
+          chosenVariant =
+            variantScores.fox.analytical >= variantScores.fox.reflective
+              ? "analytical"
+              : "reflective";
+        }
+
+        if (topAnimal === "elephant") {
+          chosenVariant =
+            variantScores.elephant.structured >= variantScores.elephant.dependable
+              ? "structured"
+              : "dependable";
+        }
+
+        const profileGroup = profiles[topAnimal];
+        const profile = profileGroup.variants[chosenVariant];
+
+        resultBadge.textContent = `${profile.emoji} Your result`;
+        resultTitle.textContent = profileGroup.title;
+
         animalImage.src = profile.image;
-        animalImage.alt = profile.title;
+        animalImage.alt = profileGroup.title;
+
         populateList(strengthsList, profile.strengths);
         populateList(watchoutsList, profile.watchouts);
 
