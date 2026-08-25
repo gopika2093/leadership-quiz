@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const restartBtn = byId("restartBtn");
   const qrCodeImage = byId("qrCodeImage");
 
-  const currentQuizUrl = `${window.location.origin}${window.location.pathname}?version=professional-style-3`;
+  const currentQuizUrl = `${window.location.origin}${window.location.pathname}?version=professional-style-5`;
   qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(currentQuizUrl)}`;
 
   function showScreen(name) {
