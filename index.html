@@ -317,8 +317,9 @@
   <div class="hero">🦁 🐼 🦊 🐘</div>
   <h1>What’s Your Leadership Style?</h1>
   <p>
-    Scan the QR code and complete this short quiz to discover your leadership style.
-    There are no right or wrong answers — choose the option that feels most like you.
+    Complete this short reflection to explore how you naturally contribute,
+    work with others and respond to professional situations. There are no right
+    or wrong answers. Choose the option that feels closest to what you would do.
   </p>
 
   <div class="qr-wrap">
@@ -331,11 +332,11 @@
 
       <section id="quizScreen" class="hidden">
         <div class="topbar">
-          <div id="questionCounter">Question 1 of 16</div>
+          <div id="questionCounter">Question 1 of 12</div>
           <div>In progress</div>
         </div>
 
-        <progress id="progressBar" value="1" max="16"></progress>
+        <progress id="progressBar" value="1" max="12"></progress>
 
         <div id="questionNumber" class="question-number"></div>
         <div class="question" id="questionText"></div>
@@ -354,12 +355,27 @@
           <img id="animalImage" class="animal-image" src="" alt="Animal result" />
 
           <div class="section">
-            <h3>Strengths</h3>
+            <h3>Your professional contribution</h3>
+            <p id="contributionText"></p>
+          </div>
+
+          <div class="section">
+            <h3>What seems to motivate you</h3>
+            <p id="motivationText"></p>
+          </div>
+
+          <div class="section">
+            <h3>How your pattern develops</h3>
+            <p id="chronologyText"></p>
+          </div>
+
+          <div class="section">
+            <h3>What you seem naturally good at</h3>
             <ul id="strengthsList"></ul>
           </div>
 
           <div class="section">
-            <h3>Watch-outs</h3>
+            <h3>What you could focus on</h3>
             <ul id="watchoutsList"></ul>
           </div>
 
@@ -368,555 +384,15 @@
           </div>
 
           <p class="footer-note">
-            Now look around the room and see who shares your animal style.
+            This profile reflects patterns in your answers. It is designed for
+            self reflection and professional development. It does not define
+            your personality or determine your suitability for a role.
           </p>
         </div>
       </section>
     </div>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const profiles = {
-        lion: {
-          title: "Lion — The Leader",
-          variants: {
-            driving: {
-              emoji: "🦁",
-              image: "lion-driving.png",
-              strengths: [
-                "Drives momentum and action",
-                "Takes initiative quickly",
-                "Comfortable making decisions",
-                "Helps move the group forward"
-              ],
-              watchouts: [
-                "May move ahead before others are ready",
-                "Can take on a lot of control in group situations",
-                "May focus strongly on their own direction"
-              ]
-            },
-            grounded: {
-              emoji: "🦁",
-              image: "lion-grounded.png",
-              strengths: [
-                "Provides direction with steadiness",
-                "Helps the group stay focused",
-                "Balances progress with responsibility",
-                "Brings confidence in uncertain situations"
-              ],
-              watchouts: [
-                "May carry too much responsibility personally",
-                "Can become heavily outcome-focused",
-                "May not always pause to share leadership"
-              ]
-            }
-          }
-        },
-
-        panda: {
-          title: "Panda — The Connector",
-          variants: {
-            inclusive: {
-              emoji: "🐼",
-              image: "panda-driving.png",
-              strengths: [
-                "Helps people feel included",
-                "Builds trust and connection",
-                "Pays attention to group dynamics",
-                "Encourages collaboration"
-              ],
-              watchouts: [
-                "May prioritise harmony over challenge",
-                "Can hesitate to address difficult issues directly",
-                "May take on too much emotional responsibility"
-              ]
-            },
-            supportive: {
-              emoji: "🐼",
-              image: "panda-grounded.png",
-              strengths: [
-                "Provides steady support to the group",
-                "Contributes to a positive team environment",
-                "Helps maintain group morale",
-                "Strengthens consistency in teamwork"
-              ],
-              watchouts: [
-                "May stay in a support role rather than step forward",
-                "Can avoid pushing ideas strongly",
-                "May place others’ needs ahead of their own voice"
-              ]
-            }
-          }
-        },
-
-        fox: {
-          title: "Fox — The Strategist",
-          variants: {
-            analytical: {
-              emoji: "🦊",
-              image: "fox-driving.png",
-              strengths: [
-                "Thinks critically and strategically",
-                "Identifies patterns and possibilities",
-                "Brings thoughtful insight",
-                "Asks useful questions"
-              ],
-              watchouts: [
-                "May overanalyse before acting",
-                "Can delay decisions while exploring options",
-                "May stay in thinking mode longer than needed"
-              ]
-            },
-            reflective: {
-              emoji: "🦊",
-              image: "fox-grounded.png",
-              strengths: [
-                "Observes situations carefully",
-                "Brings measured and thoughtful input",
-                "Reflects before contributing",
-                "Helps the group think more deeply"
-              ],
-              watchouts: [
-                "May contribute selectively rather than consistently",
-                "Can seem distant while processing ideas",
-                "May hold back input until later"
-              ]
-            }
-          }
-        },
-
-        elephant: {
-          title: "Elephant — The Stabiliser",
-          variants: {
-            structured: {
-              emoji: "🐘",
-              image: "elephant-driving.png",
-              strengths: [
-                "Keeps work structured and organised",
-                "Creates clarity around roles and tasks",
-                "Supports consistency and follow-through",
-                "Helps the group stay on track"
-              ],
-              watchouts: [
-                "May rely heavily on structure",
-                "Can find change disruptive",
-                "May prioritise process over flexibility"
-              ]
-            },
-            dependable: {
-              emoji: "🐘",
-              image: "elephant-grounded.png",
-              strengths: [
-                "Reliable and steady in group work",
-                "Follows through on responsibilities",
-                "Brings stability to the team",
-                "Supports dependable execution"
-              ],
-              watchouts: [
-                "May stay within defined boundaries rather than step forward",
-                "Can be slower to adapt when direction changes",
-                "May focus on their part more than the wider picture"
-              ]
-            }
-          }
-        }
-      };
-
-      const questions = [
-        {
-          text: "A group has just been formed for a project. What do you find yourself doing first?",
-          options: [
-            { key: "A", text: "Start shaping what needs to be done so the group can get moving", animal: "lion" },
-            { key: "B", text: "Engage with others to understand how the group is coming together", animal: "panda" },
-            { key: "C", text: "Take time to observe before forming a clear view", animal: "fox" },
-            { key: "D", text: "Think about how the work can be organised effectively", animal: "elephant" }
-          ]
-        },
-        {
-          text: "The group needs to make a quick decision. What is your instinct?",
-          options: [
-            { key: "A", text: "Help the group settle on a direction so progress can continue", animal: "lion" },
-            { key: "B", text: "Check how others are responding before moving ahead", animal: "panda" },
-            { key: "C", text: "Consider possible implications before deciding", animal: "fox" },
-            { key: "D", text: "Refer to what has already been discussed or agreed", animal: "elephant" }
-          ]
-        },
-        {
-          text: "During a group discussion, you are most likely to:",
-          options: [
-            { key: "A", text: "Keep the discussion moving toward a clear outcome", animal: "lion" },
-            { key: "B", text: "Ask questions to better understand what’s being discussed", animal: "fox" },
-            { key: "C", text: "Notice how different people are engaging in the conversation", animal: "panda" },
-            { key: "D", text: "Contribute in a way that helps move ideas forward", animal: "elephant" }
-          ]
-        },
-        {
-          text: "Something in the project isn’t going as expected. You tend to:",
-          options: [
-            { key: "A", text: "Work through what may have led to the situation", animal: "fox" },
-            { key: "B", text: "Step in to help clarify direction and move things forward", animal: "lion" },
-            { key: "C", text: "Check in with others to understand how they are experiencing it", animal: "panda" },
-            { key: "D", text: "Look at how the approach can be adjusted going forward", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When starting a new task, you usually:",
-          options: [
-            { key: "A", text: "Begin working and refine things as you go", animal: "lion" },
-            { key: "B", text: "Engage others to align on how to approach it", animal: "panda" },
-            { key: "C", text: "Think through different possibilities before acting", animal: "fox" },
-            { key: "D", text: "Structure how the task will be organised", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When there is disagreement in the group, you tend to:",
-          options: [
-            { key: "A", text: "Focus on deciding which direction to move forward in", animal: "lion" },
-            { key: "B", text: "Actively bring people together to find common ground", animal: "panda" },
-            { key: "C", text: "Explore different perspectives before reaching a conclusion", animal: "fox" },
-            { key: "D", text: "Reinforce shared expectations or ways of working", animal: "elephant" }
-          ]
-        },
-        {
-          text: "You notice the group is losing focus. What do you do?",
-          options: [
-            { key: "A", text: "Bring attention back to the goal so progress continues", animal: "lion" },
-            { key: "B", text: "Re-engage others to help bring the group back into the discussion", animal: "panda" },
-            { key: "C", text: "Pause to reflect on what might be affecting focus", animal: "fox" },
-            { key: "D", text: "Suggest returning to a clearer structure or plan", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When working under pressure, you are more likely to:",
-          options: [
-            { key: "A", text: "Act quickly to maintain momentum", animal: "lion" },
-            { key: "B", text: "Stay aware of how others are managing and respond accordingly", animal: "panda" },
-            { key: "C", text: "Take time to think through decisions carefully", animal: "fox" },
-            { key: "D", text: "Rely on structure or systems to stay on track", animal: "elephant" }
-          ]
-        },
-        {
-          text: "A team member is not contributing much. You tend to:",
-          options: [
-            { key: "A", text: "Step in to keep things progressing where needed", animal: "lion" },
-            { key: "B", text: "Reach out to understand what might be affecting them", animal: "panda" },
-            { key: "C", text: "Reflect on possible reasons behind the situation", animal: "fox" },
-            { key: "D", text: "Clarify expectations around roles and contributions", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When working on a group project over time, you naturally:",
-          options: [
-            { key: "A", text: "Keep momentum going toward outcomes", animal: "lion" },
-            { key: "B", text: "Support a positive and collaborative environment", animal: "panda" },
-            { key: "C", text: "Look for ways to improve how things are being done", animal: "fox" },
-            { key: "D", text: "Maintain consistency and organisation across the work", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When working in a group over time, you tend to:",
-          options: [
-            { key: "A", text: "Take responsibility to keep the group moving forward", animal: "lion" },
-            { key: "B", text: "Stay actively involved to support overall progress", animal: "panda" },
-            { key: "C", text: "Contribute where your input adds the most value", animal: "fox" },
-            { key: "D", text: "Focus on delivering your part effectively within the group’s direction", animal: "elephant" }
-          ]
-        },
-        {
-          text: "If a group task is not going well, you are most likely to:",
-          options: [
-            { key: "A", text: "Take initiative to help move things back on track", animal: "lion" },
-            { key: "B", text: "Support others and contribute where needed", animal: "panda" },
-            { key: "C", text: "Step in where your input can make the most difference", animal: "fox" },
-            { key: "D", text: "Continue focusing on your responsibilities within the task", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When taking on a role in a group, you are more likely to:",
-          options: [
-            { key: "A", text: "Take on responsibilities that help drive progress", animal: "lion" },
-            { key: "B", text: "Take on roles that support how the group works together", animal: "panda" },
-            { key: "C", text: "Focus on areas where you can contribute effectively", animal: "fox" },
-            { key: "D", text: "Take on a role and contribute within its scope", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When managing shared resources (e.g. budget, materials), you tend to:",
-          options: [
-            { key: "A", text: "Ensure everything is tracked and clearly accounted for", animal: "lion" },
-            { key: "B", text: "Keep others informed and aligned in decisions", animal: "panda" },
-            { key: "C", text: "Adapt based on what is needed in the situation", animal: "fox" },
-            { key: "D", text: "Follow established approaches that have worked before", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When rules or processes feel restrictive, you are more likely to:",
-          options: [
-            { key: "A", text: "Work within them while still achieving outcomes", animal: "lion" },
-            { key: "B", text: "Discuss with others how best to approach the situation", animal: "panda" },
-            { key: "C", text: "Adapt them where appropriate to make things work", animal: "fox" },
-            { key: "D", text: "Continue with the process as it is set", animal: "elephant" }
-          ]
-        },
-        {
-          text: "When working in a group project, you tend to focus on:",
-          options: [
-            { key: "A", text: "Ensuring the group achieves strong overall outcomes", animal: "lion" },
-            { key: "B", text: "Supporting others so the group works well together", animal: "panda" },
-            { key: "C", text: "Contributing where your input adds the most value", animal: "fox" },
-            { key: "D", text: "Delivering your responsibilities effectively within the group", animal: "elephant" }
-          ]
-        }
-      ];
-
-      let state = {
-        started: false,
-        currentIndex: 0,
-        answers: Array(questions.length).fill(null),
-        completed: false
-      };
-
-    const welcomeScreen = document.getElementById("welcomeScreen");
-const quizScreen = document.getElementById("quizScreen");
-const resultScreen = document.getElementById("resultScreen");
-const startBtn = document.getElementById("startBtn");
-const questionCounter = document.getElementById("questionCounter");
-const progressBar = document.getElementById("progressBar");
-const questionNumber = document.getElementById("questionNumber");
-const questionText = document.getElementById("questionText");
-const optionsContainer = document.getElementById("optionsContainer");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-const resultBadge = document.getElementById("resultBadge");
-const resultTitle = document.getElementById("resultTitle");
-const animalImage = document.getElementById("animalImage");
-const strengthsList = document.getElementById("strengthsList");
-const watchoutsList = document.getElementById("watchoutsList");
-const restartBtn = document.getElementById("restartBtn");
-const qrCodeImage = document.getElementById("qrCodeImage");
-
-const currentQuizUrl = window.location.href.split("?")[0];
-qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(currentQuizUrl)}`;
-
-      function showScreen(name) {
-        welcomeScreen.classList.add("hidden");
-        quizScreen.classList.add("hidden");
-        resultScreen.classList.add("hidden");
-
-        if (name === "welcome") welcomeScreen.classList.remove("hidden");
-        if (name === "quiz") quizScreen.classList.remove("hidden");
-        if (name === "result") resultScreen.classList.remove("hidden");
-      }
-
-      function renderQuestion() {
-        const q = questions[state.currentIndex];
-
-        questionCounter.textContent = `Question ${state.currentIndex + 1} of ${questions.length}`;
-        questionNumber.textContent = `Question ${state.currentIndex + 1} of ${questions.length}`;
-        progressBar.max = questions.length;
-        progressBar.value = state.currentIndex + 1;
-        questionText.textContent = q.text;
-        optionsContainer.innerHTML = "";
-
-        q.options.forEach((option, i) => {
-          const id = `q${state.currentIndex}_opt${i}`;
-          const label = document.createElement("label");
-          label.className = "option";
-
-          if (state.answers[state.currentIndex] === option.key) {
-            label.classList.add("selected");
-          }
-
-          label.innerHTML = `
-            <input type="radio" name="question" id="${id}" value="${option.key}" ${state.answers[state.currentIndex] === option.key ? "checked" : ""}>
-            <div class="option-key">${option.key}</div>
-            <div class="option-text">${option.text}</div>
-          `;
-
-          label.addEventListener("click", () => {
-            document.querySelectorAll(".option").forEach(el => el.classList.remove("selected"));
-            label.classList.add("selected");
-            state.answers[state.currentIndex] = option.key;
-            nextBtn.disabled = false;
-          });
-
-          optionsContainer.appendChild(label);
-        });
-
-        prevBtn.disabled = state.currentIndex === 0;
-        nextBtn.textContent = state.currentIndex === questions.length - 1 ? "See Result" : "Next";
-        nextBtn.disabled = !state.answers[state.currentIndex];
-      }
-
-      function calculateScores() {
-        const scores = { lion: 0, panda: 0, fox: 0, elephant: 0 };
-
-        state.answers.forEach((answerKey, qIndex) => {
-          if (!answerKey) return;
-          const selected = questions[qIndex].options.find(o => o.key === answerKey);
-          if (selected) scores[selected.animal]++;
-        });
-
-        return scores;
-      }
-
-      function getTopAnimals(scores) {
-        const entries = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-        const topScore = entries[0][1];
-        return entries.filter(([_, score]) => score === topScore).map(([animal]) => animal);
-      }
-
-      function populateList(target, items) {
-        target.innerHTML = "";
-        items.forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = item;
-          target.appendChild(li);
-        });
-      }
-
-      function renderResult() {
-        const scores = calculateScores();
-
-        const variantScores = {
-          lion: { driving: 0, grounded: 0 },
-          panda: { inclusive: 0, supportive: 0 },
-          fox: { analytical: 0, reflective: 0 },
-          elephant: { structured: 0, dependable: 0 }
-        };
-
-        state.answers.forEach((answerKey, qIndex) => {
-          if (!answerKey) return;
-
-          const selected = questions[qIndex].options.find(o => o.key === answerKey);
-          if (!selected) return;
-
-          const animal = selected.animal;
-
-          if (qIndex < 10) {
-            if (animal === "lion") variantScores.lion.driving++;
-            if (animal === "panda") variantScores.panda.inclusive++;
-            if (animal === "fox") variantScores.fox.analytical++;
-            if (animal === "elephant") variantScores.elephant.structured++;
-          } else {
-            if (animal === "lion") variantScores.lion.grounded++;
-            if (animal === "panda") variantScores.panda.supportive++;
-            if (animal === "fox") variantScores.fox.reflective++;
-            if (animal === "elephant") variantScores.elephant.dependable++;
-          }
-        });
-
-        const topAnimals = getTopAnimals(scores);
-
-        if (topAnimals.length > 1) {
-          resultBadge.textContent = "✨ Your result";
-          resultTitle.textContent = "Mixed Leadership Style";
-          animalImage.src = "";
-          animalImage.alt = "Mixed Leadership Style";
-          animalImage.style.background = "linear-gradient(135deg, #64748b, #334155)";
-
-          populateList(strengthsList, [
-            "Can adapt across different situations",
-            "Draws from more than one way of leading",
-            "Brings flexibility to group settings"
-          ]);
-
-          populateList(watchoutsList, [
-            "May find it harder to identify a default style",
-            "Can shift approach depending on the situation",
-            "Still benefits from reflecting on how you show up in teams"
-          ]);
-
-          state.completed = true;
-          showScreen("result");
-          return;
-        }
-
-        const topAnimal = topAnimals[0];
-        let chosenVariant = "";
-
-        if (topAnimal === "lion") {
-          chosenVariant =
-            variantScores.lion.driving >= variantScores.lion.grounded
-              ? "driving"
-              : "grounded";
-        }
-
-        if (topAnimal === "panda") {
-          chosenVariant =
-            variantScores.panda.inclusive >= variantScores.panda.supportive
-              ? "inclusive"
-              : "supportive";
-        }
-
-        if (topAnimal === "fox") {
-          chosenVariant =
-            variantScores.fox.analytical >= variantScores.fox.reflective
-              ? "analytical"
-              : "reflective";
-        }
-
-        if (topAnimal === "elephant") {
-          chosenVariant =
-            variantScores.elephant.structured >= variantScores.elephant.dependable
-              ? "structured"
-              : "dependable";
-        }
-
-        const profileGroup = profiles[topAnimal];
-        const profile = profileGroup.variants[chosenVariant];
-
-        resultBadge.textContent = `${profile.emoji} Your result`;
-        resultTitle.textContent = profileGroup.title;
-
-        animalImage.style.background = "";
-        animalImage.src = profile.image;
-        animalImage.alt = profileGroup.title;
-
-        populateList(strengthsList, profile.strengths);
-        populateList(watchoutsList, profile.watchouts);
-
-        state.completed = true;
-        showScreen("result");
-      }
-
-      startBtn.addEventListener("click", () => {
-        state.started = true;
-        showScreen("quiz");
-        renderQuestion();
-      });
-
-      prevBtn.addEventListener("click", () => {
-        if (state.currentIndex > 0) {
-          state.currentIndex--;
-          renderQuestion();
-        }
-      });
-
-      nextBtn.addEventListener("click", () => {
-        if (!state.answers[state.currentIndex]) return;
-
-        if (state.currentIndex < questions.length - 1) {
-          state.currentIndex++;
-          renderQuestion();
-        } else {
-          renderResult();
-        }
-      });
-
-      restartBtn.addEventListener("click", () => {
-        state = {
-          started: false,
-          currentIndex: 0,
-          answers: Array(questions.length).fill(null),
-          completed: false
-        };
-        showScreen("welcome");
-      });
-
-      showScreen("welcome");
-    });
-  </script>
+  <script src="quiz.js"></script>
 </body>
 </html>
