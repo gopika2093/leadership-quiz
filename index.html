@@ -254,6 +254,15 @@
       background:#f5f8fd;
     }
 
+    .motivation-summary{
+      max-width:500px;
+      margin:0 auto 22px;
+      color:var(--text);
+      font-size:1rem;
+      line-height:1.55;
+      text-align:center;
+    }
+
     .section{
       text-align:left;
       background:#fbfcff;
@@ -276,9 +285,12 @@
 
     .footer-note{
       color:var(--muted);
-      font-size:0.95rem;
-      margin-top:16px;
-      line-height:1.45;
+      font-size:0.6875rem;
+      margin:38px auto 0;
+      max-width:500px;
+      line-height:1.55;
+      text-align:justify;
+      text-justify:inter-word;
     }
     
 .qr-wrap{
@@ -358,15 +370,11 @@
           <div class="badge" id="resultBadge"></div>
           <h2 id="resultTitle"></h2>
           <img id="animalImage" class="animal-image" src="" alt="Animal result" />
+          <p id="motivationText" class="motivation-summary"></p>
 
           <div class="section">
             <h3>Your professional contribution</h3>
             <p id="contributionText"></p>
-          </div>
-
-          <div class="section">
-            <h3>What seems to motivate you</h3>
-            <p id="motivationText"></p>
           </div>
 
           <div class="section">
@@ -389,12 +397,9 @@
           </div>
 
           <p class="footer-note">
-            I created this independent project by bringing together professional
-            situations, response patterns and outcome combinations that may help
-            you understand how you naturally approach work and contribute within
-            a team. The framework has not yet undergone formal expert review, but
-            I hope your result gives you a useful and encouraging starting point
-            to recognise your strengths and consider how you would like to grow.
+            This is an independent project based on professional situations and
+            response patterns. It has not undergone formal expert review and is
+            intended only as an encouraging starting point for reflection and growth.
           </p>
         </div>
       </section>
