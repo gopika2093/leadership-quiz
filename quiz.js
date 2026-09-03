@@ -186,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const optionsContainer = byId("optionsContainer");
   const prevBtn = byId("prevBtn");
   const nextBtn = byId("nextBtn");
+  const resultTitle = byId("resultTitle");
   const animalImage = byId("animalImage");
   const contributionText = byId("contributionText");
   const motivationText = byId("motivationText");
@@ -195,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const restartBtn = byId("restartBtn");
   const qrCodeImage = byId("qrCodeImage");
 
-  const currentQuizUrl = `${window.location.origin}${window.location.pathname}?version=outcome-narrative-10`;
+  const currentQuizUrl = `${window.location.origin}${window.location.pathname}?version=outcome-title-11`;
   qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(currentQuizUrl)}`;
 
   function showScreen(name) {
@@ -344,6 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const secondaryProfile = styleProfiles[secondary.style];
     const patternInsights = buildPatternInsights(answers, primaryProfile, secondaryProfile);
 
+    resultTitle.textContent = `${primaryProfile.label} with a ${secondaryProfile.influence} influence`;
     contributionText.textContent = combinationIntroductions[`${primary.style}-${secondary.style}`];
     motivationText.textContent = motivationProfiles[dominantMotivation(answers)];
     chronologyText.textContent = buildChronology(answers);
