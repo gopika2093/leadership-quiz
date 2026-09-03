@@ -45,6 +45,21 @@ document.addEventListener("DOMContentLoaded", () => {
     responsibility: "You seem like someone who takes commitments seriously and wants work to be handled properly."
   };
 
+  const combinationIntroductions = {
+    "driver-connector": "You bring a Lion’s instinct for moving things forward, together with the Panda’s natural feel for people. You like to create direction while making space for others to be part of it.",
+    "driver-strategist": "You bring a Lion’s drive to move things forward, together with the Fox’s eye for what may be happening beneath the surface. You are ready to act, but you also want the direction to make sense.",
+    "driver-stabiliser": "You bring a Lion’s sense of direction, supported by the Elephant’s steady footing. You like to create momentum while making sure responsibilities and important details are not left behind.",
+    "connector-driver": "You bring a Panda’s feel for people, along with the Lion’s instinct for action. You want people to feel included, but you are also ready to help the team find a direction and move forward.",
+    "connector-strategist": "You bring a Panda’s understanding of people, together with the Fox’s thoughtful eye. You notice how people are experiencing the work while also looking for the patterns beneath what is being said.",
+    "connector-stabiliser": "You bring a Panda’s warmth and instinct for inclusion, supported by the Elephant’s sense of responsibility. You help people feel part of the work while giving the team something steady to rely on.",
+    "strategist-driver": "You bring a Fox’s eye for patterns and possibilities, together with the Lion’s readiness to act. You like to understand what is happening, then turn that understanding into a clear next step.",
+    "strategist-connector": "You bring a Fox’s curiosity about what lies beneath the surface, along with the Panda’s awareness of people. You look for deeper understanding while staying attentive to the voices and experiences around you.",
+    "strategist-stabiliser": "You bring a Fox’s eye for what may be happening beneath the surface, along with the Elephant’s steady sense of responsibility. You like to understand the situation properly while also making sure the important details are organised and followed through.",
+    "stabiliser-driver": "You bring an Elephant’s steady footing, together with the Lion’s forward energy. You like to make the work dependable, but you can also step in and create movement when direction is needed.",
+    "stabiliser-connector": "You bring an Elephant’s dependable nature, along with the Panda’s instinct for connection. You create clarity and follow-through while helping people feel supported and able to contribute.",
+    "stabiliser-strategist": "You bring an Elephant’s sense of responsibility, together with the Fox’s eye for what may be happening beneath the surface. You keep the work grounded while thinking carefully about the details, risks and wider picture."
+  };
+
   const option = (key, text, style, motivation, signals) => ({ key, text, style, motivation, signals });
 
   const questions = [
@@ -171,8 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const optionsContainer = byId("optionsContainer");
   const prevBtn = byId("prevBtn");
   const nextBtn = byId("nextBtn");
-  const resultBadge = byId("resultBadge");
-  const resultTitle = byId("resultTitle");
   const animalImage = byId("animalImage");
   const contributionText = byId("contributionText");
   const motivationText = byId("motivationText");
@@ -273,10 +286,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const beginning = dominantInStage(answers, 0, 4);
     const collaboration = dominantInStage(answers, 4, 8);
     const responsibility = dominantInStage(answers, 8, 12);
-    if (beginning === responsibility) {
-      return `Your answers show a consistent tendency to ${stagePhrases[beginning]} across unfamiliar, collaborative and demanding situations. When other people are involved, you also draw on ${styleProfiles[collaboration].influence.toLowerCase()} qualities.`;
+    if (beginning === collaboration && collaboration === responsibility) {
+      return `As the work unfolds, this approach tends to stay with you. Across unfamiliar, collaborative and demanding situations, you are likely to ${stagePhrases[beginning]}.`;
     }
-    return `You may begin by trying to ${stagePhrases[beginning]}. When the work becomes more collaborative, you tend to ${stagePhrases[collaboration]}. Under responsibility or pressure, you seem more likely to ${stagePhrases[responsibility]}.`;
+    if (beginning === collaboration) {
+      return `As the work unfolds, you tend to stay with this approach through the early and collaborative stages. When pressure arrives, you are more likely to ${stagePhrases[responsibility]}.`;
+    }
+    if (collaboration === responsibility) {
+      return `You may begin by trying to ${stagePhrases[beginning]}. As more people become involved and pressure builds, you tend to ${stagePhrases[collaboration]}.`;
+    }
+    if (beginning === responsibility) {
+      return `You may begin by trying to ${stagePhrases[beginning]}. Collaborative work can draw out your tendency to ${stagePhrases[collaboration]}. When pressure arrives, you often return to your starting approach.`;
+    }
+    return `As the work unfolds, you tend to shift with what the situation asks of you. You may begin by trying to ${stagePhrases[beginning]}. When other people become involved, you tend to ${stagePhrases[collaboration]}. Under pressure, you are more likely to ${stagePhrases[responsibility]}.`;
   }
 
   function buildPatternInsights(answers, primaryProfile, secondaryProfile) {
@@ -320,14 +342,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const secondary = ranked[1];
     const primaryProfile = styleProfiles[primary.style];
     const secondaryProfile = styleProfiles[secondary.style];
-    const closeCombination = primary.score - secondary.score <= 2;
     const patternInsights = buildPatternInsights(answers, primaryProfile, secondaryProfile);
 
-    resultBadge.textContent = `${primaryProfile.emoji} ${secondaryProfile.emoji} Your result`;
-    resultTitle.textContent = `${primaryProfile.label} with a ${secondaryProfile.influence} influence`;
-    contributionText.textContent = closeCombination
-      ? `You show a close combination of two ways of contributing. ${primaryProfile.contribution} Your ${secondaryProfile.influence.toLowerCase()} influence also means that ${secondaryProfile.contribution.charAt(0).toLowerCase()}${secondaryProfile.contribution.slice(1)}`
-      : `${primaryProfile.contribution} Your ${secondaryProfile.influence.toLowerCase()} influence also means that ${secondaryProfile.contribution.charAt(0).toLowerCase()}${secondaryProfile.contribution.slice(1)}`;
+    contributionText.textContent = combinationIntroductions[`${primary.style}-${secondary.style}`];
     motivationText.textContent = motivationProfiles[dominantMotivation(answers)];
     chronologyText.textContent = buildChronology(answers);
     animalImage.src = `outcome-images/${primary.style}-${secondary.style}.webp`;
