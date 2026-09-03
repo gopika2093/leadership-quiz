@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       text: "You join a team that has already started working on an important project. What are you most likely to do first?",
       options: [
-        option("A", "Look at what is already happening, identify where progress is needed and offer to take responsibility.", "driver", "progress", ["observation", "initiative", "responsibility"]),
+        option("A", "Identify what needs attention first, offer to take responsibility for it and help the work move forward.", "driver", "progress", ["observation", "initiative", "responsibility"]),
         option("B", "Speak with team members, understand how they work together and identify how you could support them.", "connector", "connection", ["empathy", "perspective", "support"]),
         option("C", "Review what has already been done, observe how the team approaches the work and then decide where you could contribute.", "strategist", "understanding", ["observation", "analysis", "curiosity"]),
         option("D", "Clarify the existing plan, understand what is expected from you and organise the responsibilities assigned to you.", "stabiliser", "responsibility", ["organisation", "reliability", "needForClarity"])
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       text: "You are asked to complete a task that you have not done before, and there is not much time. What would you naturally do?",
       options: [
-        option("A", "Find someone who has completed similar work, ask how they approached it and understand how your task fits into the wider work.", "connector", "connection", ["perspective", "curiosity", "collaboration"]),
+        option("A", "Speak with someone familiar with the work, learn from their experience and understand how your task connects with the wider team.", "connector", "connection", ["perspective", "curiosity", "collaboration"]),
         option("B", "Go through what has been provided, make a list of what needs to be delivered and organise the work within the time limit.", "stabiliser", "responsibility", ["organisation", "reliability", "needForClarity"]),
         option("C", "Look at what needs to be ready first, begin with that part and work through the remaining gaps as you go.", "driver", "progress", ["initiative", "adaptability", "comfortWithUncertainty"]),
         option("D", "Look through previous examples and background information, consider what could cause problems and decide how you will approach the task.", "strategist", "understanding", ["analysis", "riskAwareness", "observation"])
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         option("A", "Speak with them privately, ask how they are managing and understand whether something is affecting their participation.", "connector", "connection", ["empathy", "perspective", "support"]),
         option("B", "Go through their responsibilities with them, clarify what still needs to be completed and agree on what the team can expect.", "stabiliser", "responsibility", ["organisation", "accountability", "needForClarity"]),
         option("C", "Look at what their absence is delaying, take action to cover the immediate gap and keep the work progressing.", "driver", "progress", ["initiative", "responsibility", "progress"]),
-        option("D", "Look at when their participation changed, consider what may have contributed to it and decide what needs to be understood before responding.", "strategist", "understanding", ["observation", "analysis", "perspective"])
+        option("D", "Notice when their participation began to change, then speak with them to better understand what may be affecting their involvement.", "strategist", "understanding", ["observation", "analysis", "perspective"])
       ]
     },
     {
@@ -114,16 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       text: "You are responsible for an important activity, and another team member would like to lead part of it. How would you respond?",
       options: [
-        option("A", "Agree on what each person will be responsible for, establish how progress will be shared and make sure nothing is left unclear.", "stabiliser", "responsibility", ["organisation", "controlSharing", "needForClarity"]),
+        option("A", "Agree clearly on each person’s responsibilities, how progress will be shared and where decisions will sit.", "stabiliser", "responsibility", ["organisation", "controlSharing", "needForClarity"]),
         option("B", "Look at the strengths and experience each of you brings, divide the responsibilities accordingly and agree on where each person can contribute most.", "strategist", "understanding", ["analysis", "controlSharing", "collaboration"]),
         option("C", "Sit down together, discuss how you could share ownership and agree on a way of working that gives both of you space to contribute.", "connector", "connection", ["inclusion", "controlSharing", "collaboration"]),
         option("D", "Explain the outcome that needs to be achieved, agree on the boundaries and give them the freedom to lead that part of the activity.", "driver", "progress", ["controlSharing", "responsibility", "initiative"])
       ]
     },
     {
-      text: "A decision you supported contributes to a problem during an important activity. What would you do first?",
+      text: "A decision you supported contributes to a problem during an important activity. Once the immediate situation is stable, what would you focus on first?",
       options: [
-        option("A", "Step forward, acknowledge your responsibility and organise the immediate action needed to address the problem.", "driver", "progress", ["accountability", "initiative", "responsibility"]),
+        option("A", "Step forward, acknowledge your responsibility and organise the follow-up action needed to address the problem.", "driver", "progress", ["accountability", "initiative", "responsibility"]),
         option("B", "Check how the problem has affected the people involved, listen to what they need and make sure they receive appropriate support.", "connector", "connection", ["empathy", "support", "accountability"]),
         option("C", "Gather the relevant information, work out what led to the problem and avoid reaching a conclusion before the situation is clear.", "strategist", "understanding", ["analysis", "accountability", "riskAwareness"]),
         option("D", "Record what happened, follow the appropriate response process and make sure the necessary actions are completed.", "stabiliser", "responsibility", ["reliability", "accountability", "organisation"])
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     {
-      text: "Someone with less experience than you questions an approach you have chosen. What would you naturally do first?",
+      text: "A colleague questions an approach you have chosen. What would you naturally do first?",
       options: [
         option("A", "Consider whether they have noticed something you missed, look at the approach again and decide whether your thinking needs to change.", "strategist", "understanding", ["feedbackOpenness", "observation", "adaptability"]),
         option("B", "Explain what led you to the decision, consider whether their concern changes anything and decide whether the original direction should remain.", "driver", "progress", ["selfAdvocacy", "feedbackOpenness", "responsibility"]),
