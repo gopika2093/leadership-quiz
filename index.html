@@ -224,23 +224,6 @@
       text-align:center;
     }
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      background:#f8fbff;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:10px 16px;
-      font-weight:700;
-      margin-bottom:16px;
-    }
-
-    .result-wrap h2{
-      margin:0 0 14px;
-      font-size:1.7rem;
-    }
-
     .animal-image{
       width:100%;
       max-width:280px;
@@ -275,6 +258,15 @@
     .section h3{
       margin:0 0 10px;
       font-size:1rem;
+    }
+
+    .outcome-narrative p{
+      margin:0;
+      line-height:1.55;
+    }
+
+    .outcome-narrative p + p{
+      margin-top:16px;
     }
 
     ul{
@@ -368,18 +360,11 @@
 
       <section id="resultScreen" class="hidden">
         <div class="result-wrap">
-          <div class="badge" id="resultBadge"></div>
-          <h2 id="resultTitle"></h2>
           <img id="animalImage" class="animal-image" src="" alt="Animal result" />
           <p id="motivationText" class="motivation-summary"></p>
 
-          <div class="section">
-            <h3>Your professional contribution</h3>
+          <div class="section outcome-narrative">
             <p id="contributionText"></p>
-          </div>
-
-          <div class="section">
-            <h3>How your pattern develops</h3>
             <p id="chronologyText"></p>
           </div>
 
